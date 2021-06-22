@@ -1,12 +1,14 @@
 package fedorov.home.MyAnimeBot.botApi.handlers;
 
-import fedorov.home.MyAnimeBot.botApi.util.JsonDownloader;
+import fedorov.home.MyAnimeBot.botApi.util.ButtonHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
+import java.util.Formatter;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class SeasonHandler {
@@ -14,6 +16,14 @@ public class SeasonHandler {
     private String inputMessage;
     private String[] seasonSearch;
     private Set<String> seasons = new HashSet<>();
+
+    private static String ERROR_MESSAGE = "Sorry, couldn't find anything. " +
+            "\nPlease use the following search pattern : " +
+            "\n\"/season year seasonName\"" +
+            "\n where \"seasonName\" can be: \"winter, spring, summer, fall\" and is not case sensitive.";
+
+    @Autowired
+    private ButtonHandler buttonHandler;
 
     {
         seasons.add("winter");
@@ -36,6 +46,26 @@ public class SeasonHandler {
         seasonSearch = inputMessage.split(" ");
     }
 
+    public SendMessage checkAndGetReplyMessage(long userId, String year, String seasonName) {
+        String seasonUrl;
+        InlineKeyboardMarkup keyboardMarkup;
+        SendMessage messageToReturn;
+
+        if (!checkYear(year) || !checkSeason(seasonName)) {
+            return new SendMessage(userId, ERROR_MESSAGE);
+        }
+
+        seasonUrl = getSeasonUrl(year, seasonName);
+        keyboardMarkup = buttonHandler.getKeyboardMarkup(seasonUrl);
+        Formatter formatter = new Formatter();
+        String replyString = formatter.format("Here's you link to MAL which contains %s's %s season :", year, seasonName.toLowerCase()).toString();
+
+        messageToReturn = new SendMessage(userId, replyString);
+        messageToReturn.setReplyMarkup(keyboardMarkup);
+        return messageToReturn;
+    }
+
+
     public String getSeasonYear() {
         return seasonSearch[1];
     }
@@ -44,8 +74,7 @@ public class SeasonHandler {
         return seasonSearch[2];
     }
 
-    public boolean checkYear(String year) {
-        year = getSeasonYear();
+    private boolean checkYear(String year) {
         try {
             Integer.parseInt(year);
             return true;
@@ -54,8 +83,7 @@ public class SeasonHandler {
         }
     }
 
-    public boolean checkSeason(String seasonName) {
-        seasonName = getSeasonName();
+    private boolean checkSeason(String seasonName) {
         if (seasons.contains(seasonName.toLowerCase())) {
             return true;
         }
