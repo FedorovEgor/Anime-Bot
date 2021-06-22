@@ -57,33 +57,10 @@ public class TelegramFacade {
             String year = seasonHandler.getSeasonYear();
             String seasonName = seasonHandler.getSeasonName();
 
-            replyMessage = checkAndGetInputMessage(userId, year, seasonName);
+            replyMessage = seasonHandler.checkAndGetReplyMessage(userId, year, seasonName);
         }
 
         return replyMessage;
     }
-
-    private SendMessage checkAndGetInputMessage(long userId, String year, String seasonName) {
-        String seasonUrl;
-        InlineKeyboardMarkup markup;
-        Formatter formatter = new Formatter();
-        SendMessage massageToReturn;
-
-        if (!seasonHandler.checkYear(year) || !seasonHandler.checkSeason(seasonName)) {
-            return new SendMessage(userId, "Sorry, couldn't find anything. " +
-                    "\nPlease use the following search pattern : " +
-                    "\n\"/season year seasonName\"" +
-                    "\n where \"seasonName\" can be: \"winter, spring, summer, fall\" and is not case sensitive.");
-        }
-
-        seasonUrl = seasonHandler.getSeasonUrl(year, seasonName);
-        markup = buttonHandler.getKeyboardMarkup(seasonUrl);
-        String replyString = formatter.format("Here's you link to MAL which contains %s's %s season :", year, seasonName.toLowerCase()).toString();
-
-        massageToReturn = new SendMessage(userId, replyString);
-        massageToReturn.setReplyMarkup(markup);
-        return massageToReturn;
-    }
-
 }
 

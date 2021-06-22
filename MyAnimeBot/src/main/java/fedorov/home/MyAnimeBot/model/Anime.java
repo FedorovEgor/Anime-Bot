@@ -17,10 +17,10 @@ public class Anime {
 
     @Override
     public String toString() {
-        return  "Id in MAL database:  " + malId + "\n\n" +
-                "Title:  " + title + "\n\n" +
-                "Number of episodes:  " + numberOfEpisodes + "\n\n" +
-                "Synopsis:  " + description + "\n\n" +
+        return  "ID IN MAL DATABASE:  " + malId + "\n\n" +
+                "TITLE:  " + title + "\n\n" +
+                "NUMBER OF EPISODES:  " + numberOfEpisodes + "\n\n" +
+                "SYNOPSIS:  " + description + "\n\n" +
                 "MAL URL:  " + animeUrl;
     }
 }
