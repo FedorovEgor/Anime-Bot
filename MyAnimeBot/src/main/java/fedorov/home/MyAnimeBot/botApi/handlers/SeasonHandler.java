@@ -16,12 +16,7 @@ public class SeasonHandler {
     private String inputMessage;
     private String[] seasonSearch;
     private Set<String> seasons = new HashSet<>();
-
-    private static String ERROR_MESSAGE = "Sorry, couldn't find anything. " +
-            "\nPlease use the following search pattern : " +
-            "\n\"/season year seasonName\"" +
-            "\n where \"seasonName\" can be: \"winter, spring, summer, fall\" and is not case sensitive.";
-
+    
     @Autowired
     private ButtonHandler buttonHandler;
 
@@ -33,6 +28,10 @@ public class SeasonHandler {
     }
 
     private static final String API_SEASON_REQUEST = "https://myanimelist.net/anime/season/%s/%s";
+    private static final String ERROR_MESSAGE = "Sorry, couldn't find anything. " +
+            "\nPlease use the following search pattern : " +
+            "\n\"/season year seasonName\"" +
+            "\n where \"seasonName\" can be: \"winter, spring, summer, fall\" and is not case sensitive.";
 
     public String getSeasonUrl(String year, String seasonName) {
         Formatter formatter = new Formatter();
