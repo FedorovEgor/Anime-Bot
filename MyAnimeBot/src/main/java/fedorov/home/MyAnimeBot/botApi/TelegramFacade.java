@@ -1,6 +1,5 @@
 package fedorov.home.MyAnimeBot.botApi;
 
-import com.google.inject.internal.cglib.core.$ClassEmitter;
 import fedorov.home.MyAnimeBot.botApi.handlers.SeasonHandler;
 import fedorov.home.MyAnimeBot.botApi.handlers.TitleHandler;
 import fedorov.home.MyAnimeBot.botApi.util.ButtonHandler;
@@ -10,10 +9,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.io.IOException;
-import java.util.Formatter;
 
 @Component
 public class TelegramFacade {
@@ -49,8 +46,9 @@ public class TelegramFacade {
 
         if (inputMessage.startsWith("/find")) {
             String searchAttribute = inputMessage.substring(inputMessage.indexOf(" "));
-            replyMessage = new SendMessage(userId, jsonToAnimeConverter.getAnimeObjectFromJson(titleHandler.getJsonResponseAsString(searchAttribute)).toString());
+            replyMessage = new SendMessage(userId, jsonToAnimeConverter.getAnimeObjectFromTitleJson(titleHandler.getJsonResponseForTitle(searchAttribute)).toString());
         }
+
         if (inputMessage.startsWith("/season")) {
             seasonHandler.parseInputMessage(inputMessage);
 
@@ -58,6 +56,10 @@ public class TelegramFacade {
             String seasonName = seasonHandler.getSeasonName();
 
             replyMessage = seasonHandler.checkAndGetReplyMessage(userId, year, seasonName);
+        }
+
+        if (inputMessage.startsWith("/random")) {
+            replyMessage = new SendMessage(userId, jsonToAnimeConverter.getAnimeFromRandomJson(titleHandler.getJsonResponseForRandom()).toString());
         }
 
         return replyMessage;

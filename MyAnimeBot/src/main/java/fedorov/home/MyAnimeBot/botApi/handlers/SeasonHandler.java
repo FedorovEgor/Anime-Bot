@@ -13,7 +13,6 @@ import java.util.Set;
 @Component
 public class SeasonHandler {
 
-    private String inputMessage;
     private String[] seasonSearch;
     private Set<String> seasons = new HashSet<>();
     
@@ -41,7 +40,6 @@ public class SeasonHandler {
     }
 
     public void parseInputMessage(String inputMessage) {
-        this.inputMessage = inputMessage;
         seasonSearch = inputMessage.split(" ");
     }
 
@@ -83,9 +81,6 @@ public class SeasonHandler {
     }
 
     private boolean checkSeason(String seasonName) {
-        if (seasons.contains(seasonName.toLowerCase())) {
-            return true;
-        }
-        return false;
+        return seasons.contains(seasonName.toLowerCase());
     }
 }
