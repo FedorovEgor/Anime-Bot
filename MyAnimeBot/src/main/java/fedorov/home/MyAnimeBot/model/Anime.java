@@ -12,6 +12,7 @@ public class Anime {
     private String title;
     private String description;
     private String numberOfEpisodes;
+    private String score;
     private String imageUrl;
     private String animeUrl;
 
@@ -19,6 +20,7 @@ public class Anime {
     public String toString() {
         return  "ID IN MAL DATABASE:  " + malId + "\n\n" +
                 "TITLE:  " + title + "\n\n" +
+                "SCORE: " + score + "\n\n" +
                 "NUMBER OF EPISODES:  " + numberOfEpisodes + "\n\n" +
                 "SYNOPSIS:  " + description + "\n\n" +
                 "MAL URL:  " + animeUrl;
